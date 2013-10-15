@@ -4,7 +4,7 @@
 #include <time.h>
 
 
-#define ARRAY_SIZE 10
+#define ARRAY_SIZE 100000
 #define THREAD_NUM 4
 #define RANDOM_RANGE 10
 
@@ -72,18 +72,25 @@ void *thead_cal(void *thread_id)
 		end_index = ARRAY_SIZE - 1;
 	//printf("Thread ID: %ld, start_index: %d, end_index: %d\n", tid, start_index, end_index);
 
-	pthread_mutex_lock(&cmutex);
 
+	int local_smallest_value = 10;
+	int local_largest_value = -1;
+	int local_sum_value = 0;
 	for(i = start_index; i <= end_index; i++){
 		if (array_c[i] < smallest_value){
-			smallest_value = array_c[i];
+			local_smallest_value = array_c[i];
 		}
 		if (array_c[i] > largest_value){
-			largest_value = array_c[i];
+			local_largest_value = array_c[i];
 		}
-		average_value += array_c[i];
+		local_sum_value += array_c[i];
 	}
-
+	pthread_mutex_lock(&cmutex);
+	if (local_smallest_value < smallest_value)
+		smallest_value = local_smallest_value;
+	if (local_largest_value > largest_value)
+		largest_value = local_largest_value;
+	average_value += local_sum_value;
 	pthread_mutex_unlock(&cmutex);
 
 	pthread_exit(NULL);
