@@ -3,9 +3,9 @@
 #include <time.h>
 
 
-#define ARRAY_SIZE 100000
-#define THREAD_NUM 4
+#define ARRAY_SIZE 10000
 #define RANDOM_RANGE 10
+#define SUPPRESS_PRINT_ARRAY 1
 
 
 int array_a[ARRAY_SIZE], array_b[ARRAY_SIZE], array_c[ARRAY_SIZE];
@@ -14,7 +14,7 @@ int smallest_value, largest_value, average_value;
 void populate_random_numbers(int array_x[ARRAY_SIZE], int seed)
 {
 	int i;
-	srand(time(NULL) + seed);
+	srand(seed);
 	for(i = 0; i < ARRAY_SIZE; i++){
 		array_x[i] = rand() % RANDOM_RANGE;
 	}
@@ -72,12 +72,15 @@ int get_average_number(int array_x[ARRAY_SIZE])
 
 void print_array(int array_x[ARRAY_SIZE], char *name)
 {
-	printf("%s: ", name);
-	int i;
-	for(i = 0; i < ARRAY_SIZE; i++){
-		printf("%d ", array_x[i]);
+	if (!SUPPRESS_PRINT_ARRAY){
+		printf("%s: ", name);
+		int i;
+		for(i = 0; i < ARRAY_SIZE; i++){
+			printf("%d ", array_x[i]);
+		}
+		printf("\n");
 	}
-	printf("\n");
+
 }
 
 int main()
@@ -86,9 +89,11 @@ int main()
 	populate_random_numbers(array_a, 1);
 	populate_random_numbers(array_b, 2);
 	populate_average_numbers(array_a, array_b, array_c);
+
 	print_array(array_a, "Array A");
 	print_array(array_b, "Array B");
 	print_array(array_c, "Array C");
+
 	smallest_value = get_smallest_number(array_c);
 	largest_value = get_largest_number(array_c);
 	average_value = get_average_number(array_c);
@@ -97,4 +102,3 @@ int main()
 	return 0;
 
 }
-
