@@ -3,7 +3,7 @@
 #include <time.h>
 
 
-#define ARRAY_SIZE 10000
+#define ARRAY_SIZE 10
 #define RANDOM_RANGE 10
 #define SUPPRESS_PRINT_ARRAY 1
 
